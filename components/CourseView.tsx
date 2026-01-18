@@ -1,87 +1,174 @@
 
 import React from 'react';
 
+const FormulaCard: React.FC<{ title: string; formula: string; description: string; color: string }> = ({ title, formula, description, color }) => (
+  <div className={`p-5 rounded-2xl border bg-zinc-950/40 border-zinc-800 hover:border-${color}-500/50 transition-all group`}>
+    <h4 className={`text-sm font-bold text-zinc-400 mb-2 uppercase tracking-widest group-hover:text-${color}-400 transition-colors`}>{title}</h4>
+    <div className={`bg-zinc-900/80 p-4 rounded-xl font-mono text-center text-lg mb-3 border border-zinc-800 text-${color}-200 shadow-inner`}>
+      {formula}
+    </div>
+    <p className="text-xs text-zinc-500 leading-relaxed italic">{description}</p>
+  </div>
+);
+
 const CourseView: React.FC = () => {
   return (
-    <div className="space-y-12 pb-20">
-      <section className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 shadow-xl">
-        <h2 className="text-3xl font-bold text-white mb-6 flex items-center">
-          <span className="bg-blue-600 text-white w-10 h-10 rounded-lg flex items-center justify-center mr-4 text-xl shadow-lg shadow-blue-900/40">1</span>
-          Chapitre 1 : La Capitalisation
-        </h2>
-        <p className="text-zinc-400 mb-8 leading-relaxed text-lg">
-          La capitalisation est le mécanisme par lequel un capital produit des intérêts. C'est transformer le temps en valeur monétaire.
-        </p>
+    <div className="space-y-16 pb-24">
+      {/* Introduction */}
+      <div className="text-center max-w-2xl mx-auto space-y-4">
+        <h1 className="text-4xl font-black text-white tracking-tight">Masterclass Mathématiques Financières</h1>
+        <p className="text-zinc-500">Un guide complet pour maîtriser les flux financiers, du placement à l'amortissement.</p>
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 hover:border-blue-500/30 transition-all group">
-            <h3 className="font-bold text-blue-400 mb-3 group-hover:text-blue-300 transition-colors">Intérêts Simples (I.S.)</h3>
-            <p className="text-sm text-zinc-500 mb-4">Utilisé pour le court terme. Les intérêts ne sont pas réinvestis.</p>
-            <div className="bg-zinc-950 p-4 rounded-xl font-mono text-center text-lg border border-zinc-800 text-blue-200">
-              C<sub>n</sub> = C<sub>0</sub> × (1 + n × i)
-            </div>
+      {/* PARTIE 1 */}
+      <section className="relative">
+        <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 to-transparent rounded-full opacity-50"></div>
+        <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 shadow-2xl space-y-10">
+          <div className="flex items-center justify-between border-b border-zinc-800 pb-6">
+            <h2 className="text-3xl font-black text-white flex items-center gap-4">
+              <span className="bg-blue-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-900/40 text-2xl">I</span>
+              PARTIE 1 : Capitalisation & Actualisation
+            </h2>
+            <span className="text-xs font-bold text-zinc-600 uppercase tracking-widest bg-zinc-950 px-4 py-2 rounded-full border border-zinc-800">Fondamentaux</span>
           </div>
 
-          <div className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 hover:border-indigo-500/30 transition-all group">
-            <h3 className="font-bold text-indigo-400 mb-3 group-hover:text-indigo-300 transition-colors">Intérêts Composés (I.C.)</h3>
-            <p className="text-sm text-zinc-500 mb-4">Utilisé pour le long terme. Les intérêts produisent des intérêts.</p>
-            <div className="bg-zinc-950 p-4 rounded-xl font-mono text-center text-lg border border-zinc-800 text-indigo-200">
-              C<sub>n</sub> = C<sub>0</sub> × (1 + i)<sup>n</sup>
+          <div className="space-y-12">
+            {/* Intérêts Simples */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-zinc-800"></div>
+                <h3 className="text-xl font-bold text-blue-400">Intérêts Simples (Court Terme)</h3>
+                <div className="h-px flex-1 bg-zinc-800"></div>
+              </div>
+              <p className="text-zinc-400 text-sm leading-relaxed text-center max-w-xl mx-auto">
+                Les intérêts sont calculés uniquement sur le capital initial. Ils ne sont pas réinvestis (pas de capitalisation).
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <FormulaCard 
+                  title="Montant des intérêts" 
+                  formula="I = C₀ × i × n" 
+                  description="n est souvent exprimé en fraction d'année (jours/360 ou mois/12)." 
+                  color="blue"
+                />
+                <FormulaCard 
+                  title="Valeur Acquise" 
+                  formula="Cₙ = C₀ × (1 + n × i)" 
+                  description="Montant total disponible à la fin de la période." 
+                  color="blue"
+                />
+              </div>
+            </div>
+
+            {/* Intérêts Composés */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-zinc-800"></div>
+                <h3 className="text-xl font-bold text-indigo-400">Intérêts Composés (Long Terme)</h3>
+                <div className="h-px flex-1 bg-zinc-800"></div>
+              </div>
+              <p className="text-zinc-400 text-sm leading-relaxed text-center max-w-xl mx-auto">
+                Les intérêts produits à la fin de chaque période sont ajoutés au capital pour produire eux-mêmes des intérêts.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <FormulaCard 
+                  title="Valeur Acquise finale" 
+                  formula="Cₙ = C₀ × (1 + i)ⁿ" 
+                  description="La base de tous les calculs financiers de long terme." 
+                  color="indigo"
+                />
+                <FormulaCard 
+                  title="Valeur Actuelle (Actualisation)" 
+                  formula="C₀ = Cₙ × (1 + i)⁻ⁿ" 
+                  description="Combien vaut aujourd'hui une somme perçue dans le futur." 
+                  color="indigo"
+                />
+              </div>
+            </div>
+
+            {/* Équivalence des taux */}
+            <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800">
+              <h3 className="font-bold text-zinc-300 mb-6 flex items-center gap-3">
+                <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Taux Proportionnels vs Équivalents
+              </h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <span className="text-xs font-black text-blue-500 uppercase tracking-widest">Proportionnels (Simple)</span>
+                  <p className="text-xs text-zinc-500">Le taux est simplement divisé par la période.</p>
+                  <div className="p-3 bg-zinc-900 rounded-lg text-sm font-mono text-center">iₚ = iₐ / k</div>
+                </div>
+                <div className="space-y-4">
+                  <span className="text-xs font-black text-indigo-500 uppercase tracking-widest">Équivalents (Composé)</span>
+                  <p className="text-xs text-zinc-500">Garantit la même valeur acquise finale.</p>
+                  <div className="p-3 bg-zinc-900 rounded-lg text-sm font-mono text-center">(1 + iₐ) = (1 + iₚ)ᵏ</div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-10 p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800">
-          <h3 className="font-bold text-zinc-300 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            Équivalence des taux
-          </h3>
-          <ul className="space-y-3 text-zinc-400">
-            <li className="flex gap-2">
-              <span className="text-blue-500 font-bold">•</span>
-              <span><strong>En simple :</strong> Proratisation linéaire (ex: 6% an = 0.5% mois).</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="text-blue-500 font-bold">•</span>
-              <span><strong>En composé :</strong> (1 + i<sub>a</sub>) = (1 + i<sub>m</sub>)<sup>12</sup>. Les intérêts sont capitalisés chaque période.</span>
-            </li>
-          </ul>
         </div>
       </section>
 
-      <section className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 shadow-xl">
-        <h2 className="text-3xl font-bold text-white mb-6 flex items-center">
-          <span className="bg-emerald-600 text-white w-10 h-10 rounded-lg flex items-center justify-center mr-4 text-xl shadow-lg shadow-emerald-900/40">2</span>
-          Chapitre 2 : Les Emprunts Indivis
-        </h2>
-        <p className="text-zinc-400 mb-8 leading-relaxed text-lg">
-          Un emprunt indivis est un prêt classique auprès d'une banque. Chaque paiement (annuité) comprend des intérêts et une part de capital.
-        </p>
-
-        <div className="space-y-8">
-          <div className="flex flex-wrap gap-3">
-            <span className="px-4 py-2 bg-emerald-950 text-emerald-400 border border-emerald-900/50 rounded-xl text-sm font-bold">a = I + M</span>
-            <span className="px-4 py-2 bg-emerald-950 text-emerald-400 border border-emerald-900/50 rounded-xl text-sm font-bold">I = i × K<sub>p-1</sub></span>
-            <span className="px-4 py-2 bg-emerald-950 text-emerald-400 border border-emerald-900/50 rounded-xl text-sm font-bold">M = K<sub>p-1</sub> - K<sub>p</sub></span>
+      {/* PARTIE 2 */}
+      <section className="relative">
+        <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-600 to-transparent rounded-full opacity-50"></div>
+        <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 shadow-2xl space-y-10">
+          <div className="flex items-center justify-between border-b border-zinc-800 pb-6">
+            <h2 className="text-3xl font-black text-white flex items-center gap-4">
+              <span className="bg-emerald-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/40 text-2xl">II</span>
+              PARTIE 2 : Les Emprunts Indivis
+            </h2>
+            <span className="text-xs font-bold text-zinc-600 uppercase tracking-widest bg-zinc-950 px-4 py-2 rounded-full border border-zinc-800">Crédits</span>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-5 bg-zinc-800/30 border border-zinc-700/50 rounded-2xl">
-              <h4 className="font-bold text-zinc-200 mb-2">In Fine</h4>
-              <p className="text-xs text-zinc-500">Capital remboursé en une seule fois à la fin. Les intérêts sont payés périodiquement sur le capital total.</p>
+            <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800">
+              <h4 className="text-emerald-400 font-bold mb-4 text-sm uppercase">Composantes</h4>
+              <ul className="space-y-3">
+                <li className="flex justify-between text-xs border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-500">Annuité (a)</span>
+                  <span className="text-zinc-300 font-mono">a = I + M</span>
+                </li>
+                <li className="flex justify-between text-xs border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-500">Intérêts (Iₚ)</span>
+                  <span className="text-zinc-300 font-mono">i × Kₚ₋₁</span>
+                </li>
+                <li className="flex justify-between text-xs">
+                  <span className="text-zinc-500">Amort. (Mₚ)</span>
+                  <span className="text-zinc-300 font-mono">Kₚ₋₁ - Kₚ</span>
+                </li>
+              </ul>
             </div>
-            <div className="p-5 bg-zinc-800/30 border border-zinc-700/50 rounded-2xl">
-              <h4 className="font-bold text-zinc-200 mb-2">Amort. Constants</h4>
-              <p className="text-xs text-zinc-500">La part de capital remboursé (M) est identique chaque période. Les annuités sont dégressives.</p>
-            </div>
-            <div className="p-5 bg-emerald-900/20 border border-emerald-500/30 rounded-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                <svg className="w-12 h-12 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            
+            <div className="md:col-span-2 bg-emerald-950/20 border border-emerald-500/30 p-6 rounded-2xl">
+              <div className="flex items-start justify-between mb-4">
+                <h4 className="text-emerald-400 font-black uppercase tracking-widest text-sm">Formule de l'Annuité Constante</h4>
+                <div className="px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded text-[10px] font-bold">Standard Bancaire</div>
               </div>
-              <h4 className="font-bold text-emerald-400 mb-2">Annuités Constantes</h4>
-              <p className="text-xs text-emerald-600/80 mb-4 font-medium">Le système le plus courant. Le montant total payé (a) ne change jamais.</p>
-              <div className="font-mono text-xs bg-zinc-950 p-3 rounded-xl border border-emerald-900/50 text-emerald-300">
-                a = K<sub>0</sub> × [ i / (1 - (1+i)<sup>-n</sup>) ]
+              <div className="bg-zinc-950 p-6 rounded-xl font-mono text-center text-2xl text-emerald-300 border border-emerald-900/50 mb-4">
+                a = K₀ × [ i / (1 - (1 + i)⁻ⁿ) ]
+              </div>
+              <p className="text-xs text-zinc-500 text-center italic">Calcul de l'échéance fixe périodique pour amortir le capital K₀ sur n périodes.</p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold text-white">Lois de progression</h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-zinc-950 rounded-xl border border-zinc-800">
+                  <span className="text-[10px] font-black text-zinc-600 block mb-1">Amortissements (M)</span>
+                  <p className="text-xs text-zinc-400 mb-2">En annuités constantes, les amortissements progressent en progression géométrique de raison (1+i).</p>
+                  <div className="font-mono text-emerald-400 text-center">Mₚ = M₁ × (1 + i)ᵖ⁻¹</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold text-white">Coût réel du crédit</h3>
+              <div className="p-4 bg-zinc-950 rounded-xl border border-zinc-800">
+                 <span className="text-[10px] font-black text-zinc-600 block mb-1">Total des Intérêts Payés</span>
+                 <p className="text-xs text-zinc-400 mb-2">Somme de toutes les annuités moins le capital emprunté initial.</p>
+                 <div className="font-mono text-emerald-400 text-center">ΣI = (n × a) - K₀</div>
               </div>
             </div>
           </div>
