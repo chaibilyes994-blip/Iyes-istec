@@ -1,8 +1,8 @@
 
 export enum AppSection {
   COURSE = 'course',
-  CALCULATOR = 'calculator',
-  PRACTICE = 'practice'
+  PRACTICE = 'practice',
+  EXAM = 'exam'
 }
 
 export interface AmortizationRow {
@@ -28,7 +28,9 @@ export interface Question {
   text: string;
   formula: string;
   params: any;
-  correctAnswer: number;
+  correctAnswer: any;
   explanation: string;
   unit: string;
+  type?: 'calculation' | 'theory';
+  options?: string[];
 }
