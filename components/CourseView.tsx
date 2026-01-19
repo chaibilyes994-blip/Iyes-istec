@@ -2,13 +2,23 @@
 import React from 'react';
 import { CourseType } from '../types';
 
-const FormulaCard: React.FC<{ title: string; formula: string; description?: string; color: string }> = ({ title, formula, description, color }) => (
-  <div className={`p-5 rounded-2xl border bg-zinc-950/40 border-zinc-800 hover:border-${color}-500/50 transition-all group h-full flex flex-col`}>
-    <h4 className={`text-[10px] font-black text-zinc-500 mb-2 uppercase tracking-widest group-hover:text-${color}-400 transition-colors`}>{title}</h4>
-    <div className={`bg-zinc-900/80 p-4 rounded-xl font-mono text-center text-base mb-3 border border-zinc-800 text-${color}-200 shadow-inner flex-1 flex items-center justify-center`}>
-      {formula}
+const FormulaBlock: React.FC<{ title: string; formula: string; desc: string; color: string }> = ({ title, formula, desc, color }) => (
+  <div className={`group relative p-8 rounded-[2.5rem] border bg-zinc-900/40 border-zinc-800 hover:border-${color}-500/50 transition-all duration-500`}>
+    <div className={`absolute -top-3 -right-3 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-${color}-600 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity`}>
+      Essentiel
     </div>
-    {description && <p className="text-[11px] text-zinc-500 leading-relaxed italic">{description}</p>}
+    <h4 className={`text-[11px] font-black text-zinc-500 mb-6 uppercase tracking-[0.3em] group-hover:text-${color}-400 transition-colors`}>{title}</h4>
+    <div className="flex items-center justify-center min-h-[100px] mb-6">
+      <div className={`text-3xl md:text-4xl font-mono font-bold tracking-tighter text-white group-hover:scale-105 transition-transform duration-500`}>
+        {formula.split('=').map((part, i) => (
+          <span key={i}>
+            {i > 0 && <span className={`text-${color}-500 mx-3`}>=</span>}
+            {part.trim()}
+          </span>
+        ))}
+      </div>
+    </div>
+    <p className="text-sm text-zinc-500 font-medium leading-relaxed italic border-t border-zinc-800 pt-4">{desc}</p>
   </div>
 );
 
@@ -19,86 +29,83 @@ interface Props {
 const CourseView: React.FC<Props> = ({ course }) => {
   if (course === 'finance') {
     return (
-      <div className="space-y-16 pb-24 animate-in fade-in duration-700">
-        <div className="max-w-2xl space-y-2">
-          <h1 className="text-4xl font-black text-white tracking-tight uppercase">I.S.T.E.C. Finance</h1>
-          <p className="text-zinc-500 font-medium">Mathématiques Financières : Référentiel complet des formules.</p>
-        </div>
+      <div className="space-y-24 pb-32 animate-in fade-in duration-1000">
+        <header className="max-w-3xl space-y-4">
+          <h1 className="text-5xl font-black text-white tracking-tighter uppercase">Mathématiques Financières</h1>
+          <p className="text-zinc-500 text-lg font-medium border-l-4 border-blue-600 pl-6">Le guide ultime des formules de capitalisation et d'emprunt pour l'I.S.T.E.C.</p>
+        </header>
 
-        {/* PARTIE 1 Finance */}
-        <section className="relative space-y-6">
-          <div className="flex items-center gap-4">
-            <span className="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl shadow-lg shadow-blue-900/40">1</span>
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Capitalisation & Actualisation</h2>
+        <section className="space-y-10">
+          <div className="flex items-center gap-6">
+            <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-2xl font-black text-white shadow-2xl shadow-blue-900/40">01</div>
+            <div>
+              <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Flux & Capitalisation</h2>
+              <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-[0.4em]">Valeurs présentes et futures</p>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FormulaCard title="Intérêt Simple" formula="I = C₀ × i × n" description="Court terme. n en fraction d'année (jours/360)." color="blue" />
-            <FormulaCard title="Valeur Acquise (Simple)" formula="Cₙ = C₀ (1 + ni)" description="Capital initial + intérêts produits." color="blue" />
-            <FormulaCard title="Valeur Acquise (Composé)" formula="Cₙ = C₀ (1 + i)ⁿ" description="Long terme. Réinvestissement des intérêts." color="indigo" />
-            <FormulaCard title="Actualisation (Composé)" formula="C₀ = Cₙ (1 + i)⁻ⁿ" description="Valeur présente d'un flux futur." color="indigo" />
-            <FormulaCard title="Taux Proportionnel" formula="i_p = i_a / k" description="Simple division du taux annuel." color="zinc" />
-            <FormulaCard title="Taux Équivalent" formula="(1+i_a) = (1+i_p)ᵏ" description="Même valeur acquise en intérêts composés." color="zinc" />
+          <div className="grid lg:grid-cols-2 gap-8">
+            <FormulaBlock title="Intérêts Simples" formula="I = C₀ × i × n" desc="Usage court terme. n est souvent exprimé en jours/360." color="blue" />
+            <FormulaBlock title="Valeur Acquise" formula="Cₙ = C₀ (1 + i)ⁿ" desc="Intérêts composés. La valeur d'un capital après n périodes." color="indigo" />
+            <FormulaBlock title="Valeur Actuelle" formula="C₀ = Cₙ (1 + i)⁻ⁿ" desc="Actualisation. Utile pour ramener un flux futur à aujourd'hui." color="blue" />
+            <FormulaBlock title="Taux Équivalent" formula="(1+iₐ) = (1+iₚ)ᵏ" desc="iₚ est le taux périodique (mensuel, trimestriel) pour un taux annuel iₐ." color="zinc" />
           </div>
         </section>
 
-        {/* PARTIE 2 Finance */}
-        <section className="relative space-y-6">
-          <div className="flex items-center gap-4">
-            <span className="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl shadow-lg shadow-emerald-900/40">2</span>
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Emprunts & Annuités</h2>
+        <section className="space-y-10">
+          <div className="flex items-center gap-6">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-2xl font-black text-white shadow-2xl shadow-emerald-900/40">02</div>
+            <div>
+              <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Remboursements Indivis</h2>
+              <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-[0.4em]">Annuités et amortissements</p>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FormulaCard title="Annuité Constante" formula="a = K₀ × [i / (1-(1+i)⁻ⁿ)]" description="Échéance périodique fixe (Intérêt + Amortissement)." color="emerald" />
-            <FormulaCard title="Amortissement p" formula="Mₚ = M₁ (1 + i)ᵖ⁻¹" description="Progression géométrique des amortissements." color="emerald" />
-            <FormulaCard title="Dernier Amortissement" formula="Mₙ = M₁ (1 + i)ⁿ⁻¹" description="M₁ est le premier amortissement." color="emerald" />
-            <FormulaCard title="Capital Restant p" formula="Kₚ = K₀ - ΣM" description="K₀ moins somme des amortissements effectués." color="emerald" />
-            <FormulaCard title="Intérêt de la période" formula="Iₚ = Kₚ₋₁ × i" description="Calculé sur le capital restant dû." color="emerald" />
-            <FormulaCard title="Coût Total du Crédit" formula="ΣI = (n × a) - K₀" description="Somme totale des intérêts payés." color="emerald" />
+          <div className="grid lg:grid-cols-2 gap-8">
+            <FormulaBlock title="Annuité Constante" formula="a = K₀ [ i / (1-(1+i)⁻ⁿ) ]" desc="Le montant fixe versé à chaque période (Intérêt + Amortissement)." color="emerald" />
+            <FormulaBlock title="Amortissement p" formula="Mₚ = M₁ (1 + i)ᵖ⁻¹" desc="L'amortissement progresse géométriquement chaque mois." color="emerald" />
+            <FormulaBlock title="Intérêt Période" formula="Iₚ = Kₚ₋₁ × i" desc="L'intérêt est calculé sur le capital restant dû au début." color="emerald" />
+            <FormulaBlock title="Annuité Simple" formula="a = I + M" desc="Composition basique d'une échéance bancaire." color="emerald" />
           </div>
         </section>
       </div>
     );
   }
 
-  // Management Course View
   return (
-    <div className="space-y-16 pb-24 animate-in fade-in duration-700">
-      <div className="max-w-2xl space-y-2">
-        <h1 className="text-4xl font-black text-white tracking-tight uppercase">I.S.T.E.C. Gestion</h1>
-        <p className="text-zinc-500 font-medium">Gestion Commerciale & Contrôle B2 : Synthèse de cours.</p>
-      </div>
+    <div className="space-y-24 pb-32 animate-in fade-in duration-1000">
+      <header className="max-w-3xl space-y-4">
+        <h1 className="text-5xl font-black text-white tracking-tighter uppercase">Gestion Commerciale</h1>
+        <p className="text-zinc-500 text-lg font-medium border-l-4 border-amber-600 pl-6">Maîtrise des indicateurs de performance, marges et seuils de rentabilité.</p>
+      </header>
 
-      {/* PARTIE 1 Management */}
-      <section className="relative space-y-6">
-        <div className="flex items-center gap-4">
-          <span className="bg-amber-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl shadow-lg shadow-amber-900/40">1</span>
-          <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Analyse Commerciale (Flux & Prix)</h2>
+      <section className="space-y-10">
+        <div className="flex items-center gap-6">
+          <div className="w-14 h-14 rounded-2xl bg-amber-600 flex items-center justify-center text-2xl font-black text-white shadow-2xl shadow-amber-900/40">01</div>
+          <div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Marges & Coefficients</h2>
+            <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-[0.4em]">Structure du profit unitaire</p>
+          </div>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FormulaCard title="Coût de Revient" formula="P.A. - Reducs + Frais" description="P.A. Catalogue - (Remise/Rabais/Ristourne) + Frais Achat." color="amber" />
-          <FormulaCard title="CdeR Moyen (CUMP)" formula="Σ(Q×C) / ΣQ" description="Coût de revient pondéré par les quantités du lot." color="amber" />
-          <FormulaCard title="Chiffre d'Affaires" formula="PV TTC × Quantité" description="Valeur totale facturée toutes taxes comprises." color="amber" />
-          <FormulaCard title="Passage HT → TTC" formula="PV TTC = HT × (1+TVA)" description="Taux courants : 20%, 10%, 5.5%, 2.1%." color="amber" />
-          <FormulaCard title="Marge Commerciale" formula="PV HT - PA HT" description="Différence brute pour couvrir les charges fixes." color="emerald" />
-          <FormulaCard title="Taux de Marge" formula="(Marge / PA HT) × 100" description="Rentabilité par rapport au coût d'achat." color="emerald" />
-          <FormulaCard title="Taux de Marque" formula="(Marge / PV HT) × 100" description="Part de la marge dans le prix de vente HT." color="emerald" />
-          <FormulaCard title="Coeff. Multiplicateur" formula="PV TTC / PA HT" description="Nombre (>1) pour passer du coût d'achat au prix TTC." color="emerald" />
+        <div className="grid lg:grid-cols-2 gap-8">
+          <FormulaBlock title="Coût de Revient" formula="P.A. - Réducs + Frais" desc="Calcul du coût réel de l'article avant stockage." color="amber" />
+          <FormulaBlock title="Taux de Marge" formula="(Marge / P.A. HT) × 100" desc="Rentabilité calculée sur le coût d'achat." color="amber" />
+          <FormulaBlock title="Taux de Marque" formula="(Marge / P.V. HT) × 100" desc="Part de la marge dans le prix de vente HT." color="emerald" />
+          <FormulaBlock title="Coefficient Multiplicateur" formula="P.V. TTC / P.A. HT" desc="Pour passer directement du coût d'achat au prix étiquette." color="zinc" />
         </div>
       </section>
 
-      {/* PARTIE 2 Management */}
-      <section className="relative space-y-6">
-        <div className="flex items-center gap-4">
-          <span className="bg-rose-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl shadow-lg shadow-rose-900/40">2</span>
-          <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Stocks & Seuil de Rentabilité</h2>
+      <section className="space-y-10">
+        <div className="flex items-center gap-6">
+          <div className="w-14 h-14 rounded-2xl bg-rose-600 flex items-center justify-center text-2xl font-black text-white shadow-2xl shadow-rose-900/40">02</div>
+          <div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Exploitation & Risques</h2>
+            <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-[0.4em]">Stocks et seuil critique</p>
+          </div>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FormulaCard title="Délai Moyen Stock" formula="(Stock / CMV) × 360" description="Vitesse de rotation en jours d'écoulement." color="rose" />
-          <FormulaCard title="Besoin en Fonds (BFR)" formula="Stocks + Créances - Dettes" description="Capitaux mobilisés par le cycle d'exploitation." color="rose" />
-          <FormulaCard title="Marge s/ Coût Variable" formula="CA - Charges Var." description="Aussi appelée MCV (Marge sur Coûts Variables)." color="rose" />
-          <FormulaCard title="Seuil Rentabilité" formula="F / (MCV/CA)" description="CA min. pour Résultat = 0. (F = Charges Fixes)." color="rose" />
-          <FormulaCard title="Point Mort (jours)" formula="(SR / CA Annuel) × 360" description="Date à laquelle le seuil est atteint." color="rose" />
-          <FormulaCard title="Indice d'Évolution" formula="(V₁ / V₀) × 100" description="Comparaison par rapport à une valeur de référence." color="zinc" />
+        <div className="grid lg:grid-cols-2 gap-8">
+          <FormulaBlock title="Délai Moyen Stock" formula="(Stock / CMV) × 360" desc="Nombre de jours moyen avant épuisement du stock." color="rose" />
+          <FormulaBlock title="Seuil Rentabilité" formula="C.F. / Taux M.C.V." desc="Chiffre d'affaires minimum pour ne pas être à perte." color="rose" />
+          <FormulaBlock title="Point Mort" formula="(S.R. / C.A.) × 360" desc="Le jour de l'année où l'entreprise devient rentable." color="rose" />
+          <FormulaBlock title="Taux de M.C.V." formula="(M.C.V. / C.A.) × 100" desc="Marge sur coûts variables rapportée au CA." color="rose" />
         </div>
       </section>
     </div>
