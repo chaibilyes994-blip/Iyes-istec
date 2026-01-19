@@ -20,7 +20,6 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; message: string; expected: string } | null>(null);
   const [score, setScore] = useState(0);
   
-  // Suivi étendu pour éviter les répétitions (mémorise les 8 dernières questions)
   const lastQuestionsHistory = useRef<string[]>([]);
 
   const generateFinanceQuestion = useCallback((targetMode: string): Question => {
@@ -33,57 +32,46 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
         const i = (Math.floor(Math.random() * 8) + 2) / 100;
         const n = Math.floor(Math.random() * 10) + 2;
         const res = c0 * Math.pow(1 + i, n);
-        return { id: 'f1_cn', text: `Valeur acquise (Cₙ) d'un capital de ${formatCurrency(c0)} placé à ${i*100}% composé pendant ${n} ans ?`, correctAnswer: Number(res.toFixed(2)), explanation: `Cₙ = C₀(1+i)ⁿ`, unit: '€', formula: '', params: {} };
+        return { id: 'f1_cn', text: `Valeur acquise (Cₙ) d'un capital de ${formatCurrency(c0)} placé à ${i*100}% composé pendant ${n} ans ?`, correctAnswer: Number(res.toFixed(2)), explanation: `Formule : Cₙ = C₀(1+i)ⁿ`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const cn = Math.floor(Math.random() * 10000) + 5000;
-        const i = 0.04; const n = 6;
-        const res = cn / Math.pow(1.04, 6);
-        return { id: 'f1_c0', text: `Actualisation : Quel capital C₀ faut-il placer à 4% composé pour disposer de ${formatCurrency(cn)} dans 6 ans ?`, correctAnswer: Number(res.toFixed(2)), explanation: `C₀ = Cₙ(1+i)⁻ⁿ`, unit: '€', formula: '', params: {} };
+        const ia = (Math.floor(Math.random() * 6) + 3);
+        const im = Math.pow(1 + ia/100, 1/12) - 1;
+        return { id: 'f1_equiv_mensuel', text: `Calculer le taux MENSUEL équivalent à un taux annuel de ${ia}%. (Saisir en %, ex: 0.4868)`, correctAnswer: Number((im * 100).toFixed(4)), explanation: `iₘ = (1+iₐ)^(1/12) - 1. Utilisez la touche y^(1/x) !`, unit: '%', formula: '', params: {} };
       });
       generators.push(() => {
-        const c0 = 2500; const i = 0.05; const days = [30, 45, 60, 90][Math.floor(Math.random() * 4)];
+        const ia = (Math.floor(Math.random() * 5) + 2);
+        const it = Math.pow(1 + ia/100, 1/4) - 1;
+        return { id: 'f1_equiv_trimestriel', text: `Calculer le taux TRIMESTRIEL équivalent à un taux annuel de ${ia}%. (Saisir en %, ex: 1.25)`, correctAnswer: Number((it * 100).toFixed(4)), explanation: `iₜ = (1+iₐ)^(1/4) - 1`, unit: '%', formula: '', params: {} };
+      });
+      generators.push(() => {
+        const c0 = 3500; const i = 0.045; const days = [45, 75, 105][Math.floor(Math.random() * 3)];
         const interest = c0 * i * (days / 360);
-        return { id: 'f1_simple_int', text: `Calculer les intérêts SIMPLES produits par ${formatCurrency(c0)} à 5% pendant ${days} jours.`, correctAnswer: Number(interest.toFixed(2)), explanation: `I = C₀ × i × (n/360)`, unit: '€', formula: '', params: {} };
-      });
-      generators.push(() => {
-        const c0 = 4000; const i = 0.035; const n = 5;
-        const cn = c0 * Math.pow(1 + i, n);
-        return { id: 'f1_int_comp', text: `Quel est le montant total des intérêts COMPOSÉS pour un placement de ${formatCurrency(c0)} à 3,5% sur 5 ans ?`, correctAnswer: Number((cn - c0).toFixed(2)), explanation: `Intérêts = Cₙ - C₀`, unit: '€', formula: '', params: {} };
-      });
-      generators.push(() => {
-        const ia = 0.06;
-        const im = Math.pow(1 + ia, 1/12) - 1;
-        return { id: 'f1_equiv', text: `Calculer le taux mensuel équivalent à un taux annuel de 6%. (Arrondir à 4 décimales en %, ex: 0,4868)`, correctAnswer: Number((im * 100).toFixed(4)), explanation: `iₘ = (1+iₐ)^(1/12) - 1`, unit: '%', formula: '', params: {} };
+        return { id: 'f1_int_simple', text: `Quel est le montant des intérêts SIMPLES pour un capital de ${formatCurrency(c0)} à 4,5% pendant ${days} jours ?`, correctAnswer: Number(interest.toFixed(2)), explanation: `I = C₀ × i × (n/360)`, unit: '€', formula: '', params: {} };
       });
     }
 
     // --- PARTIE 2 : EMPRUNTS ---
     if (targetMode === 'part2' || targetMode === 'all') {
       generators.push(() => {
-        const k0 = Math.floor(Math.random() * 50000) + 50000;
-        const i = 0.03; const n = 15;
+        const k0 = Math.floor(Math.random() * 30000) + 20000;
+        const i = 0.025; const n = 10;
         const a = k0 * (i / (1 - Math.pow(1 + i, -n)));
-        return { id: 'f2_annuity', text: `Calculer l'annuité constante d'un emprunt de ${formatCurrency(k0)} sur 15 ans au taux de 3%.`, correctAnswer: Number(a.toFixed(2)), explanation: `a = K₀ × [i / (1-(1+i)⁻ⁿ)]`, unit: '€', formula: '', params: {} };
+        return { id: 'f2_annuity_calc', text: `Calculer l'annuité constante d'un prêt de ${formatCurrency(k0)} sur 10 ans au taux annuel de 2,5%.`, correctAnswer: Number(a.toFixed(2)), explanation: `a = K₀ × [i / (1-(1+i)⁻ⁿ)]`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const k0 = 20000; const i = 0.04; const a = 4492.54;
-        const m1 = a - (k0 * i);
-        return { id: 'f2_m1', text: `Pour un prêt de ${formatCurrency(k0)} à 4% avec une annuité de ${formatCurrency(a)}, quel est le 1er amortissement (M₁) ?`, correctAnswer: Number(m1.toFixed(2)), explanation: `M₁ = a - (K₀ × i)`, unit: '€', formula: '', params: {} };
+        const k0 = 15000; const rate = 5; const n = 5;
+        const a = calculateConstantAnnuity(k0, n, rate);
+        const i1 = k0 * (rate/100);
+        return { id: 'f2_i1', text: `Pour un emprunt de ${formatCurrency(k0)} à ${rate}% remboursé par annuités constantes de ${formatCurrency(a)}, quel est le montant des intérêts de la 1ère période ?`, correctAnswer: Number(i1.toFixed(2)), explanation: `I₁ = K₀ × i`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const k0 = 10000; const i = 0.02; const n = 5;
-        const a = calculateConstantAnnuity(k0, n, i * 100);
-        return { id: 'f2_total_cost', text: `Quel est le coût TOTAL du crédit pour un emprunt de ${formatCurrency(k0)} sur 5 ans à 2% (annuités constantes) ?`, correctAnswer: Number((a * n - k0).toFixed(2)), explanation: `Coût = (n × a) - K₀`, unit: '€', formula: '', params: {} };
-      });
-      generators.push(() => {
-        const m1 = 1500; const i = 0.03;
-        const m2 = m1 * (1 + i);
-        return { id: 'f2_progression', text: `Si le 1er amortissement M₁ est de ${formatCurrency(m1)} et le taux est de 3%, quel est le 2ème amortissement M₂ ?`, correctAnswer: Number(m2.toFixed(2)), explanation: `Mₚ = M₁ × (1+i)ᵖ⁻¹`, unit: '€', formula: '', params: {} };
+        const m1 = 2000; const rate = 3;
+        const m2 = m1 * (1.03);
+        return { id: 'f2_m2_direct', text: `Si le premier amortissement M₁ d'un prêt à annuités constantes est de ${formatCurrency(m1)} avec un taux de 3%, quel est le montant de M₂ ?`, correctAnswer: Number(m2.toFixed(2)), explanation: `M₂ = M₁ × (1+i)`, unit: '€', formula: '', params: {} };
       });
     }
 
-    // Sélection aléatoire avec vérification d'historique
     let selectedIdx: number;
     let attempts = 0;
     do {
@@ -102,53 +90,41 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
     // --- PARTIE 1 : PRIX & MARGES ---
     if (targetMode === 'part1' || targetMode === 'all') {
       generators.push(() => {
-        const pa = 45; const pv = 70;
-        const marge = pv - pa;
-        return { id: 'm1_marge', text: `Taux de MARGE pour un article acheté ${pa}€ HT et revendu ${pv}€ HT ?`, correctAnswer: Number(((marge/pa)*100).toFixed(2)), explanation: `((PV-PA)/PA)×100`, unit: '%', formula: '', params: {} };
+        const pa_brut = 120; const remise = 10;
+        return { id: 'm1_pa_net', text: `Un article coûte ${pa_brut}€ HT. On obtient une remise de ${remise}%. Quel est le prix d'achat net HT ?`, correctAnswer: Number((pa_brut * (1 - remise/100)).toFixed(2)), explanation: `PA Net = PA Brut × (1 - Remise)`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const pa = 60; const pv = 100;
-        const marge = pv - pa;
-        return { id: 'm1_marque', text: `Taux de MARQUE pour un article acheté ${pa}€ HT et revendu ${pv}€ HT ?`, correctAnswer: Number(((marge/pv)*100).toFixed(2)), explanation: `((PV-PA)/PV)×100`, unit: '%', formula: '', params: {} };
+        const pa = 80; const pv = 130;
+        return { id: 'm1_taux_marge_2', text: `Calculer le taux de MARGE (en %) pour un achat à ${pa}€ HT et une vente à ${pv}€ HT.`, correctAnswer: Number((((pv-pa)/pa)*100).toFixed(2)), explanation: `((PV-PA)/PA)×100`, unit: '%', formula: '', params: {} };
       });
       generators.push(() => {
-        const pa = 40; const pv_ttc = 72;
-        return { id: 'm1_coeff', text: `Calculer le coefficient multiplicateur (PV TTC / PA HT) pour un achat à ${pa}€ HT et une vente à ${pv_ttc}€ TTC.`, correctAnswer: Number((pv_ttc/pa).toFixed(2)), explanation: `PV TTC / PA HT`, unit: '', formula: '', params: {} };
+        const pa = 90; const pv = 140;
+        return { id: 'm1_taux_marque_2', text: `Calculer le taux de MARQUE (en %) pour un achat à ${pa}€ HT et une vente à ${pv}€ HT.`, correctAnswer: Number((((pv-pa)/pv)*100).toFixed(2)), explanation: `((PV-PA)/PV)×100`, unit: '%', formula: '', params: {} };
       });
       generators.push(() => {
-        const ttc = 150; const tva = 20;
-        const ht = ttc / 1.2;
-        return { id: 'm1_ht_from_ttc', text: `Calculer le prix HT d'un produit vendu ${ttc}€ TTC (TVA 20%).`, correctAnswer: Number(ht.toFixed(2)), explanation: `HT = TTC / 1,20`, unit: '€', formula: '', params: {} };
+        const ht = 200; const tva = 20;
+        return { id: 'm1_ttc_calc', text: `Un article coûte ${ht}€ HT. Quel est son prix TTC avec une TVA à ${tva}% ?`, correctAnswer: Number((ht * (1 + tva/100)).toFixed(2)), explanation: `TTC = HT × (1 + TVA)`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const pa_brut = 100; const remise = 10; const port = 5;
-        const pa_net = pa_brut - remise + port;
-        return { id: 'm1_revient', text: `Calculer le coût de revient : Prix Achat Brut 100€, Remise 10€, Frais de port 5€.`, correctAnswer: pa_net, explanation: `PA Brut - Remise + Frais`, unit: '€', formula: '', params: {} };
+        const ttc = 180; const tva = 20;
+        return { id: 'm1_ht_from_ttc_2', text: `Un article est affiché à ${ttc}€ TTC. Quel est son prix HT (TVA 20%) ?`, correctAnswer: Number((ttc / 1.2).toFixed(2)), explanation: `HT = TTC / 1.20`, unit: '€', formula: '', params: {} };
       });
     }
 
     // --- PARTIE 2 : PERFORMANCE & STOCKS ---
     if (targetMode === 'part2' || targetMode === 'all') {
       generators.push(() => {
-        const cf = 35000; const tmcv = 40;
+        const cf = 24000; const tmcv = 25;
         const sr = cf / (tmcv/100);
-        return { id: 'm2_sr', text: `Calculer le Seuil de Rentabilité (SR) si Charges Fixes = ${formatCurrency(cf)} et Taux de MCV = ${tmcv}%.`, correctAnswer: Number(sr.toFixed(2)), explanation: `SR = CF / Taux MCV`, unit: '€', formula: '', params: {} };
+        return { id: 'm2_sr_calc', text: `Charges Fixes = ${formatCurrency(cf)}, Taux de MCV = ${tmcv}%. Calculer le Seuil de Rentabilité (SR).`, correctAnswer: Number(sr.toFixed(2)), explanation: `SR = CF / Taux MCV`, unit: '€', formula: '', params: {} };
       });
       generators.push(() => {
-        const sm = 8000; const cmv = 48000;
-        const delai = (sm / cmv) * 360;
-        return { id: 'm2_delai_stock', text: `Si le Stock Moyen est de ${formatCurrency(sm)} et le CMV annuel est de ${formatCurrency(cmv)}, quel est le délai moyen de stockage ?`, correctAnswer: Number(delai.toFixed(0)), explanation: `(Stock / CMV) × 360`, unit: ' jours', formula: '', params: {} };
+        const sr = 100000; const ca = 400000;
+        return { id: 'm2_pm_calc', text: `Si le SR est de ${formatCurrency(sr)} et le CA annuel de ${formatCurrency(ca)}, quel est le Point Mort (en jours) ?`, correctAnswer: Math.round((sr/ca)*360), explanation: `(SR / CA) × 360`, unit: ' jours', formula: '', params: {} };
       });
       generators.push(() => {
-        const sr = 180000; const ca = 600000;
-        const pm = (sr / ca) * 360;
-        return { id: 'm2_pm', text: `Calculer le Point Mort (en jours) si SR = ${formatCurrency(sr)} et CA annuel = ${formatCurrency(ca)}.`, correctAnswer: Number(pm.toFixed(0)), explanation: `(SR / CA) × 360`, unit: ' jours', formula: '', params: {} };
-      });
-      generators.push(() => {
-        const pv_unit = 25; const cv_unit = 15;
-        const mcv = pv_unit - cv_unit;
-        const tmcv = (mcv / pv_unit) * 100;
-        return { id: 'm2_tmcv', text: `Quel est le taux de MCV si le Prix de Vente est de ${pv_unit}€ et les Charges Variables unitaires sont de ${cv_unit}€ ?`, correctAnswer: Number(tmcv.toFixed(2)), explanation: `((PV-CV)/PV)×100`, unit: '%', formula: '', params: {} };
+        const sm = 12000; const cmv = 60000;
+        return { id: 'm2_rot_calc', text: `Stock Moyen = ${formatCurrency(sm)}, CMV = ${formatCurrency(cmv)}. Calculer le délai moyen de stockage (jours).`, correctAnswer: Math.round((sm/cmv)*360), explanation: `(Stock / CMV) × 360`, unit: ' jours', formula: '', params: {} };
       });
     }
 
@@ -183,8 +159,8 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
     const val = parseFloat(cleanInput);
     if (isNaN(val)) return;
 
-    // Seuil de tolérance élargi pour les calculs complexes (0.5% ou 0.25€)
-    const threshold = Math.max(0.25, Math.abs(question.correctAnswer * 0.005));
+    // Seuil de tolérance dynamique selon la taille de la réponse attendue
+    const threshold = Math.max(0.005, Math.abs(question.correctAnswer * 0.001));
     const isCorrect = Math.abs(val - question.correctAnswer) <= threshold;
     
     if (isCorrect) setScore(s => s + 1);
@@ -197,11 +173,11 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
 
   if (setup) {
     const options = course === 'finance' ? [
-      { id: 'part1', title: 'Flux & Cap.', desc: 'Focus sur les intérêts, valeurs acquises et actualisation.', color: 'blue' },
+      { id: 'part1', title: 'Flux & Cap.', desc: 'Focus sur les intérêts, valeurs acquises et taux équivalents.', color: 'blue' },
       { id: 'part2', title: 'Emprunts', desc: 'Focus sur les annuités, amortissements et crédits.', color: 'emerald' },
       { id: 'all', title: 'Mode Mixte', desc: 'Toute la palette technique de la finance.', color: 'zinc' }
     ] : [
-      { id: 'part1', title: 'Prix & Marges', desc: 'Formation des prix, taux de marge et marque.', color: 'amber' },
+      { id: 'part1', title: 'Prix & Marges', desc: 'Formation des prix, remises et TVA.', color: 'amber' },
       { id: 'part2', title: 'Analyse Expl.', desc: 'Seuil de rentabilité, point mort et gestion de stock.', color: 'rose' },
       { id: 'all', title: 'Mode Mixte', desc: 'Toute la palette technique de la gestion.', color: 'zinc' }
     ];
@@ -288,7 +264,7 @@ const PracticeQuiz: React.FC<Props> = ({ course }) => {
           </div>
         )}
       </div>
-      <p className="text-center text-[10px] font-black text-zinc-700 uppercase tracking-[0.5em] animate-pulse">Algorithme de diversification actif • Entraînement I.S.T.E.C.</p>
+      <p className="text-center text-[10px] font-black text-zinc-700 uppercase tracking-[0.5em] animate-pulse">Calculatrice scientifique à disposition pour les exposants fractionnaires</p>
     </div>
   );
 };
