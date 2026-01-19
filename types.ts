@@ -5,6 +5,8 @@ export enum AppSection {
   EXAM = 'exam'
 }
 
+export type CourseType = 'finance' | 'management';
+
 export interface AmortizationRow {
   period: number;
   remainingStart: number;
@@ -15,13 +17,6 @@ export interface AmortizationRow {
 }
 
 export type InterestType = 'simple' | 'compound';
-
-export interface CalculationParams {
-  c0: number;
-  i: number;
-  n: number;
-  type: InterestType;
-}
 
 export interface Question {
   id: string;
