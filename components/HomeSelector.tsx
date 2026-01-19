@@ -11,12 +11,12 @@ const HomeSelector: React.FC<Props> = ({ onSelect }) => {
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-6">
       <div className="max-w-5xl w-full">
         <div className="text-center mb-16 space-y-4">
-          <h1 className="text-5xl font-black text-white tracking-tighter">FONTANA <span className="text-blue-500">LEARNING</span></h1>
-          <p className="text-zinc-500 text-lg">Choisissez votre pôle d'excellence académique</p>
+          <h1 className="text-5xl font-black text-white tracking-tighter">I.S.T.E.C. <span className="text-blue-500">ÉTUDES</span></h1>
+          <p className="text-zinc-500 text-lg">Sélectionnez votre module de révision</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Card 1: Finance */}
+          {/* Module 1: Finance */}
           <button 
             onClick={() => onSelect('finance')}
             className="group relative bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-10 text-left transition-all hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-900/20 active:scale-[0.98] overflow-hidden"
@@ -27,16 +27,16 @@ const HomeSelector: React.FC<Props> = ({ onSelect }) => {
             <div className="bg-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-900/40">
               <span className="text-2xl font-black text-white">F</span>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">Fontana Finance</h2>
-            <p className="text-zinc-400 mb-8 leading-relaxed">
-              Masterclass Mathématiques Financières : Capitalisation, Actualisation, et Emprunts Indivis.
+            <h2 className="text-3xl font-bold text-white mb-2">Mathématiques Financières</h2>
+            <p className="text-zinc-500 mb-8 leading-relaxed text-sm">
+              Capitalisation, actualisation, annuités et tableaux d'amortissement.
             </p>
             <div className="flex items-center gap-2 text-blue-500 font-bold uppercase tracking-widest text-xs">
-              Accéder au pôle <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              Lancer le module <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </div>
           </button>
 
-          {/* Card 2: Management */}
+          {/* Module 2: Management */}
           <button 
             onClick={() => onSelect('management')}
             className="group relative bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-10 text-left transition-all hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-900/20 active:scale-[0.98] overflow-hidden"
@@ -47,12 +47,12 @@ const HomeSelector: React.FC<Props> = ({ onSelect }) => {
             <div className="bg-emerald-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-emerald-900/40">
               <span className="text-2xl font-black text-white">M</span>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">Gestion & Contrôle</h2>
-            <p className="text-zinc-400 mb-8 leading-relaxed">
-              Gestion Commerciale B2 : Coûts, Marges, Ratios de rentabilité et Analyse des stocks.
+            <h2 className="text-3xl font-bold text-white mb-2">Gestion Commerciale</h2>
+            <p className="text-zinc-500 mb-8 leading-relaxed text-sm">
+              Analyse des marges, calcul des coûts, ratios de rentabilité et stocks.
             </p>
             <div className="flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs">
-              Accéder au pôle <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              Lancer le module <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </div>
           </button>
         </div>

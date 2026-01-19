@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { calculateCompoundInterest, formatCurrency } from '../services/mathUtils';
-import { calculateTauxMarge, calculateCA, calculateCoeffMult } from '../services/managementUtils';
 import { Question, CourseType } from '../types';
 
 interface AttemptRecord {
@@ -28,32 +27,32 @@ const ExamMode: React.FC<Props> = ({ course }) => {
     
     if (course === 'finance') {
       if (dice > 0.5) {
-        // Theory Finance
         const pool = [
           { q: "Quelle est la formule des intérêts simples ?", a: "C0 * (1 + n*i)", opt: ["C0 * (1 + i)^n", "C0 * (1 + n*i)", "C0 / (1 + i)^n", "C0 * i"] },
-          { q: "En intérêts composés, l'équivalence des taux se base sur :", a: "(1+ia) = (1+im)^12", opt: ["ia = im * 12", "(1+ia) = (1+im)^12", "ia = im / 12", "ia = im^12"] }
+          { q: "En intérêts composés, l'équivalence des taux se base sur :", a: "(1+ia) = (1+im)^12", opt: ["ia = im * 12", "(1+ia) = (1+im)^12", "ia = im / 12", "ia = im^12"] },
+          { q: "Que signifie 'Annuites Constantes' ?", a: "Le montant payé chaque période est identique", opt: ["Le capital remboursé est identique", "Le montant payé chaque période est identique", "Les intérêts sont identiques", "L'emprunt est gratuit"] }
         ];
         const sel = pool[Math.floor(Math.random() * pool.length)];
-        return { id: Math.random().toString(), text: sel.q, type: 'theory', options: sel.opt.sort(() => Math.random() - 0.5), correctAnswer: sel.a, explanation: "", formula: "", unit: "", params: {} };
+        return { id: Math.random().toString(), text: sel.q, type: 'theory', options: sel.opt.sort(() => Math.random() - 0.5), correctAnswer: sel.a, explanation: "Révision : Partie 1 & 2.", formula: "", unit: "", params: {} };
       } else {
-        // Calculation Finance
-        const c0 = 2000; const n = 5; const i = 4;
+        const c0 = Math.floor(Math.random() * 5000) + 1000;
+        const n = Math.floor(Math.random() * 8) + 2;
+        const i = 5;
         const cn = calculateCompoundInterest(c0, n, i);
-        return { id: Math.random().toString(), text: `Valeur acquise de 2000€ à 4% composé sur 5 ans ?`, type: 'calculation', correctAnswer: Number(cn.toFixed(2)), explanation: "Cₙ = C₀(1+i)ⁿ", unit: "€", formula: "", params: {} };
+        return { id: Math.random().toString(), text: `Valeur acquise de ${c0}€ à 5% composé sur ${n} ans ?`, type: 'calculation', correctAnswer: Number(cn.toFixed(2)), explanation: "Cn = C0(1+i)ⁿ", unit: "€", formula: "", params: {} };
       }
     } else {
-      // Management Questions
       if (dice > 0.5) {
-        // Theory Management
         const pool = [
           { q: "Que représente le coût de revient ?", a: "Ce que l'article coûte réellement à l'entreprise", opt: ["Le prix affiché en rayon", "Ce que l'article coûte réellement à l'entreprise", "La marge bénéficiaire", "Le montant de la TVA"] },
-          { q: "Le taux de marge est rapporté au :", a: "Coût d'achat HT", opt: ["Prix de vente TTC", "Prix de vente HT", "Coût d'achat HT", "Montant des taxes"] }
+          { q: "Le taux de marge est rapporté au :", a: "Coût d'achat HT", opt: ["Prix de vente TTC", "Prix de vente HT", "Coût d'achat HT", "Montant des taxes"] },
+          { q: "Le point mort exprime :", a: "La date de début de rentabilité", opt: ["Le montant des charges fixes", "La date de début de rentabilité", "Le stock maximum", "Le CA minimum"] }
         ];
         const sel = pool[Math.floor(Math.random() * pool.length)];
-        return { id: Math.random().toString(), text: sel.q, type: 'theory', options: sel.opt.sort(() => Math.random() - 0.5), correctAnswer: sel.a, explanation: "", formula: "", unit: "", params: {} };
+        return { id: Math.random().toString(), text: sel.q, type: 'theory', options: sel.opt.sort(() => Math.random() - 0.5), correctAnswer: sel.a, explanation: "Révision : Partie 1 & 2.", formula: "", unit: "", params: {} };
       } else {
-        // Calculation Management
-        return { id: Math.random().toString(), text: "Un produit est acheté 100€ HT et revendu 120€ HT. Quel est le taux de marge ?", type: 'calculation', correctAnswer: 20, explanation: "((120-100)/100)*100 = 20%", unit: "%", formula: "", params: {} };
+        const pa = 100; const pv = 125;
+        return { id: Math.random().toString(), text: `Un produit est acheté 100€ HT et revendu 125€ HT. Quel est le taux de marge ?`, type: 'calculation', correctAnswer: 25, explanation: "((125-100)/100)*100 = 25%", unit: "%", formula: "", params: {} };
       }
     }
   }, [course]);
@@ -102,15 +101,15 @@ const ExamMode: React.FC<Props> = ({ course }) => {
     return (
       <div className="max-w-2xl mx-auto bg-zinc-900 p-12 rounded-[2.5rem] border border-zinc-800 text-center shadow-2xl">
         <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter">EXAMEN <span className={course === 'finance' ? 'text-blue-500' : 'text-emerald-500'}>{course}</span></h2>
-        <p className="text-zinc-500 mb-12">Réglez votre chrono et lancez la session d'évaluation infinie.</p>
+        <p className="text-zinc-500 mb-12">Évaluation chronométrée. Questions générées aléatoirement.</p>
         <div className="flex justify-center gap-6 mb-12">
           {[10, 15, 20].map(m => (
-            <button key={m} onClick={() => setTimeLimit(m)} className={`w-20 h-20 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${timeLimit === m ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-zinc-800 text-zinc-600'}`}>
+            <button key={m} onClick={() => setTimeLimit(m)} className={`w-20 h-20 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${timeLimit === m ? 'border-blue-500 bg-blue-500/10 text-white shadow-lg' : 'border-zinc-800 text-zinc-600'}`}>
               <span className="text-2xl font-black">{m}</span><span className="text-[10px] font-bold">MIN</span>
             </button>
           ))}
         </div>
-        <button onClick={startExam} className={`w-full py-6 rounded-3xl font-black text-xl text-white shadow-xl ${course === 'finance' ? 'bg-blue-600 shadow-blue-900/20' : 'bg-emerald-600 shadow-emerald-900/20'}`}>LANCER L'ÉPREUVE</button>
+        <button onClick={startExam} className={`w-full py-6 rounded-3xl font-black text-xl text-white shadow-xl ${course === 'finance' ? 'bg-blue-600' : 'bg-emerald-600'}`}>LANCER L'ÉPREUVE</button>
       </div>
     );
   }
@@ -119,7 +118,7 @@ const ExamMode: React.FC<Props> = ({ course }) => {
     return (
       <div className="max-w-4xl mx-auto space-y-10 animate-in zoom-in-95 duration-700 pb-20">
         <div className="bg-zinc-900 p-12 rounded-[2.5rem] border border-zinc-800 shadow-2xl text-center">
-          <h2 className="text-4xl font-black text-white mb-4">Bilan de l'examen</h2>
+          <h2 className="text-4xl font-black text-white mb-4">Résultats</h2>
           <div className="grid grid-cols-2 gap-6 mb-8">
             <div className="bg-zinc-950 p-8 rounded-3xl border border-zinc-800">
               <span className="block text-[10px] font-black text-zinc-600 uppercase mb-2">Réussite</span>
@@ -134,13 +133,13 @@ const ExamMode: React.FC<Props> = ({ course }) => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-black text-white px-2">Révision détaillée</h3>
+          <h3 className="text-xl font-black text-white px-2 uppercase tracking-widest">Révision des erreurs</h3>
           {history.map((h, i) => (
             <div key={i} className={`p-6 rounded-3xl border ${h.isCorrect ? 'border-emerald-500/20 bg-emerald-500/5' : 'border-red-500/20 bg-red-500/5'}`}>
               <p className="text-white font-bold mb-4">{h.question.text}</p>
-              <div className="flex gap-4 text-sm font-mono">
+              <div className="flex gap-4 text-xs font-mono uppercase font-black">
                 <span className={h.isCorrect ? 'text-emerald-500' : 'text-red-500'}>Réponse : {h.userAnswer}</span>
-                {!h.isCorrect && <span className="text-emerald-500">Correct : {h.question.correctAnswer}</span>}
+                {!h.isCorrect && <span className="text-emerald-500">Correct : {h.question.correctAnswer} {h.question.unit}</span>}
               </div>
             </div>
           ))}
@@ -153,7 +152,7 @@ const ExamMode: React.FC<Props> = ({ course }) => {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex justify-between items-center bg-zinc-900 px-8 py-5 rounded-3xl border border-zinc-800">
         <span className="font-mono text-3xl font-black text-white">{formatTime(timeLeft)}</span>
-        <div className="text-right"><span className="block text-[10px] font-black text-zinc-600">SCORE</span><span className="text-2xl font-black text-blue-500">{score}</span></div>
+        <div className="text-right"><span className="block text-[10px] font-black text-zinc-600">QUESTIONS</span><span className="text-2xl font-black text-blue-500">{history.length + 1}</span></div>
       </div>
       <div className="bg-zinc-900 p-10 rounded-[2.5rem] border border-zinc-800 shadow-2xl min-h-[400px] flex flex-col justify-between">
         {currentQuestion && (
