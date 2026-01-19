@@ -35,137 +35,230 @@ const ExamMode: React.FC<Props> = ({ course }) => {
       // --- THEMES FINANCE ---
 
       // 1. INTÉRÊTS SIMPLES
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'simple', generator: () => ({
-        id: 'f_th_1', type: 'theory', text: "Dans quel cas utilise-t-on généralement les intérêts simples ?", 
+        id: 'f_th_1', type: 'theory', module: 'finance', theme: 'Intérêts Simples', difficulty: 'easy',
+        text: "Dans quel cas utilise-t-on généralement les intérêts simples ?", 
         correctAnswer: "Opérations de court terme (< 1 an)",
         options: ["Placements longs (> 5 ans)", "Opérations de court terme (< 1 an)", "Emprunts immobiliers", "Calcul d'inflation"],
-        explanation: "Les intérêts simples sont la norme pour les produits financiers de moins d'un an.", unit: "", formula: "", params: {}
+        explanation: "Les intérêts simples sont la norme pour les produits financiers de moins d'un an.", 
+        method: "Analyse de la maturité du placement.", courseReminder: "Simples < 1 an, Composés > 1 an", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'simple', generator: () => {
         const c0 = 10000; const i = 3; const d = 90;
-        return { id: 'f_calc_s1', text: `Calculer les intérêts produits par ${formatCurrency(c0)} à 3% (simple) pendant 90 jours.`, type: 'calculation', correctAnswer: 75, explanation: "10000 * 0.03 * (90/360)", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_s1', text: `Calculer les intérêts produits par ${formatCurrency(c0)} à 3% (simple) pendant 90 jours.`, 
+          type: 'calculation', module: 'finance', theme: 'Intérêts Simples', difficulty: 'medium',
+          correctAnswer: 75, explanation: "10000 * 0.03 * (90/360)", method: "I = C0 * i * n", courseReminder: "I = C0 * i * n", unit: "€" 
+        };
       }});
 
       // 2. CAPITALISATION COMPOSÉE
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'compound', generator: () => ({
-        id: 'f_th_2', type: 'theory', text: "Que signifie 'capitaliser des intérêts' ?", 
+        id: 'f_th_2', type: 'theory', module: 'finance', theme: 'Capitalisation Composée', difficulty: 'easy',
+        text: "Que signifie 'capitaliser des intérêts' ?", 
         correctAnswer: "Ajouter les intérêts au capital pour qu'ils produisent eux-mêmes des intérêts",
         options: ["Retirer les gains chaque mois", "Ajouter les intérêts au capital pour qu'ils produisent eux-mêmes des intérêts", "Réduire la dette", "Payer des frais de gestion"],
-        explanation: "C'est le principe des intérêts composés.", unit: "", formula: "", params: {}
+        explanation: "C'est le principe des intérêts composés.", method: "Définition de la capitalisation.", courseReminder: "C(n) = C(0)(1+i)^n", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'compound', generator: () => {
         const c0 = 5000; const n = 4;
         const res = c0 * Math.pow(1.05, 4);
-        return { id: 'f_calc_c1', text: `Valeur acquise (Cₙ) de ${formatCurrency(c0)} placé à 5% composé pendant 4 ans.`, type: 'calculation', correctAnswer: Number(res.toFixed(2)), explanation: "5000 * (1.05)^4", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_c1', text: `Valeur acquise (Cₙ) de ${formatCurrency(c0)} placé à 5% composé pendant 4 ans.`, 
+          type: 'calculation', module: 'finance', theme: 'Capitalisation Composée', difficulty: 'medium',
+          correctAnswer: Number(res.toFixed(2)), explanation: "5000 * (1.05)^4", method: "Cn = C0 * (1+i)^n", courseReminder: "Cn = C0 * (1+i)^n", unit: "€" 
+        };
       }});
 
       // 3. ACTUALISATION
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'discount', generator: () => {
         const cn = 10000; const n = 3;
         const res = cn * Math.pow(1.04, -3);
-        return { id: 'f_calc_a1', text: `Quelle est la valeur actuelle (C₀) d'une somme de ${formatCurrency(cn)} disponible dans 3 ans (taux 4% composé) ?`, type: 'calculation', correctAnswer: Number(res.toFixed(2)), explanation: "10000 * (1.04)^-3", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_a1', text: `Quelle est la valeur actuelle (C₀) d'une somme de ${formatCurrency(cn)} disponible dans 3 ans (taux 4% composé) ?`, 
+          type: 'calculation', module: 'finance', theme: 'Actualisation', difficulty: 'medium',
+          correctAnswer: Number(res.toFixed(2)), explanation: "10000 * (1.04)^-3", method: "C0 = Cn * (1+i)^-n", courseReminder: "C0 = Cn * (1+i)^-n", unit: "€" 
+        };
       }});
 
       // 4. TAUX ÉQUIVALENTS
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'equiv', generator: () => ({
-        id: 'f_th_3', type: 'theory', text: "Deux taux sont dits équivalents si :", 
+        id: 'f_th_3', type: 'theory', module: 'finance', theme: 'Taux Équivalents', difficulty: 'medium',
+        text: "Deux taux sont dits équivalents si :", 
         correctAnswer: "Appliqués au même capital pendant la même durée, ils produisent la même valeur acquise",
         options: ["Ils ont la même valeur faciale", "Appliqués au même capital pendant la même durée, ils produisent la même valeur acquise", "L'un est le double de l'autre", "Ils sont tous les deux inférieurs à 10%"],
-        explanation: "C'est la définition mathématique de l'équivalence de taux.", unit: "", formula: "", params: {}
+        explanation: "C'est la définition mathématique de l'équivalence de taux.", method: "Définition de l'équivalence de taux.", courseReminder: "(1+ia) = (1+ik)^k", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'equiv', generator: () => {
         const res = (Math.pow(1.06, 1/12) - 1) * 100;
-        return { id: 'f_calc_e1', text: `Calculer le taux mensuel équivalent à un taux annuel de 6% (en %, 4 décimales).`, type: 'calculation', correctAnswer: Number(res.toFixed(4)), explanation: "(1.06)^(1/12) - 1", unit: "%", formula: "", params: {} };
+        return { 
+          id: 'f_calc_e1', text: `Calculer le taux mensuel équivalent à un taux annuel de 6% (en %, 4 décimales).`, 
+          type: 'calculation', module: 'finance', theme: 'Taux Équivalents', difficulty: 'hard',
+          correctAnswer: Number(res.toFixed(4)), explanation: "(1.06)^(1/12) - 1", method: "im = (1+ia)^(1/12) - 1", courseReminder: "(1+ia) = (1+im)^12", unit: "%" 
+        };
       }});
 
       // 5. ANNUITÉS
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'annuity', generator: () => {
         const k0 = 150000; const n = 20; const i = 3.5;
         const a = calculateConstantAnnuity(k0, n, i);
-        return { id: 'f_calc_an1', text: `Annuité constante pour un prêt de ${formatCurrency(k0)} sur 20 ans à 3,5%.`, type: 'calculation', correctAnswer: Number(a.toFixed(2)), explanation: "K₀ * [i / (1-(1+i)^-n)]", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_an1', text: `Annuité constante pour un prêt de ${formatCurrency(k0)} sur 20 ans à 3,5%.`, 
+          type: 'calculation', module: 'finance', theme: 'Annuités', difficulty: 'hard',
+          correctAnswer: Number(a.toFixed(2)), explanation: "K₀ * [i / (1-(1+i)^-n)]", method: "a = K0 * [i / (1-(1+i)^-n)]", courseReminder: "a = K0 * [i / (1-(1+i)^-n)]", unit: "€" 
+        };
       }});
 
       // 6. AMORTISSEMENT
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'amort', generator: () => ({
-        id: 'f_th_4', type: 'theory', text: "Dans un tableau d'amortissement à annuités constantes, le capital restant dû :", 
+        id: 'f_th_4', type: 'theory', module: 'finance', theme: 'Amortissement', difficulty: 'medium',
+        text: "Dans un tableau d'amortissement à annuités constantes, le capital restant dû :", 
         correctAnswer: "Décroît de plus en plus vite",
         options: ["Reste constant", "Décroît linéairement", "Croît avec le temps", "Décroît de plus en plus vite"],
-        explanation: "L'amortissement augmentant à chaque période, la dette diminue de façon accélérée.", unit: "", formula: "", params: {}
+        explanation: "L'amortissement augmentant à chaque période, la dette diminue de façon accélérée.", method: "Analyse du profil d'amortissement.", courseReminder: "Amortissement = Annuité - Intérêts", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'amort', generator: () => {
         const k0 = 20000; const i = 0.04; const a = 4492.54;
         const m1 = a - (k0 * i);
-        return { id: 'f_calc_m1', text: `Emprunt de ${formatCurrency(k0)} à 4%. Annuité = ${formatCurrency(a)}. Calculer l'amortissement M₁ de la 1ère année.`, type: 'calculation', correctAnswer: Number(m1.toFixed(2)), explanation: "M₁ = a - (K₀ * i)", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_m1', text: `Emprunt de ${formatCurrency(k0)} à 4%. Annuité = ${formatCurrency(a)}. Calculer l'amortissement M₁ de la 1ère année.`, 
+          type: 'calculation', module: 'finance', theme: 'Amortissement', difficulty: 'medium',
+          correctAnswer: Number(m1.toFixed(2)), explanation: "M₁ = a - (K₀ * i)", method: "M1 = a - (K0 * i)", courseReminder: "a = Intérêt + Amortissement", unit: "€" 
+        };
       }});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'amort', generator: () => {
         const m1 = 1500; const i = 0.03;
         const m10 = m1 * Math.pow(1.03, 9);
-        return { id: 'f_calc_m10', text: `Si M₁ = ${formatCurrency(m1)} et le taux est de 3%, quel est le 10ème amortissement M₁₀ ?`, type: 'calculation', correctAnswer: Number(m10.toFixed(2)), explanation: "Mₚ = M₁ * (1+i)^(p-1)", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'f_calc_m10', text: `Si M₁ = ${formatCurrency(m1)} et le taux est de 3%, quel est le 10ème amortissement M₁₀ ?`, 
+          type: 'calculation', module: 'finance', theme: 'Amortissement', difficulty: 'hard',
+          correctAnswer: Number(m10.toFixed(2)), explanation: "Mₚ = M₁ * (1+i)^(p-1)", method: "Mp = M1 * (1+i)^(p-1)", courseReminder: "Mp = M1 * (1+i)^(p-1)", unit: "€" 
+        };
       }});
 
     } else {
       // --- THEMES MANAGEMENT ---
 
       // 1. FORMATION DES PRIX (HT/TTC/TVA)
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'prices', generator: () => {
         const ht = 150;
-        return { id: 'm_calc_p1', text: `Calculer le prix TTC d'un article coûtant ${ht}€ HT (TVA 20%).`, type: 'calculation', correctAnswer: 180, explanation: "150 * 1.2", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'm_calc_p1', text: `Calculer le prix TTC d'un article coûtant ${ht}€ HT (TVA 20%).`, 
+          type: 'calculation', module: 'management', theme: 'Formation des Prix', difficulty: 'easy',
+          correctAnswer: 180, explanation: "150 * 1.2", method: "TTC = HT * (1 + TVA)", courseReminder: "TTC = HT * 1.20", unit: "€" 
+        };
       }});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'prices', generator: () => {
         const ttc = 144;
-        return { id: 'm_calc_p2', text: `Quel est le prix HT d'un article à ${ttc}€ TTC (TVA 20%) ?`, type: 'calculation', correctAnswer: 120, explanation: "144 / 1.2", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'm_calc_p2', text: `Quel est le prix HT d'un article à ${ttc}€ TTC (TVA 20%) ?`, 
+          type: 'calculation', module: 'management', theme: 'Formation des Prix', difficulty: 'easy',
+          correctAnswer: 120, explanation: "144 / 1.2", method: "HT = TTC / (1 + TVA)", courseReminder: "HT = TTC / 1.20", unit: "€" 
+        };
       }});
 
       // 2. MARGES ET TAUX
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'margins', generator: () => ({
-        id: 'm_th_1', type: 'theory', text: "Le taux de marge est calculé par rapport :", 
+        id: 'm_th_1', type: 'theory', module: 'management', theme: 'Marges et Taux', difficulty: 'medium',
+        text: "Le taux de marge est calculé par rapport :", 
         correctAnswer: "Au coût d'achat HT",
         options: ["Au prix de vente HT", "Au coût d'achat HT", "Au prix de vente TTC", "Au chiffre d'affaires"],
-        explanation: "Marge / Coût Achat HT.", unit: "", formula: "", params: {}
+        explanation: "Marge / Coût Achat HT.", method: "Définition du taux de marge.", courseReminder: "Taux Marge = Marge / PA HT", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'margins', generator: () => {
         const pa = 50; const pv = 75;
-        return { id: 'm_calc_m1', text: `PA HT = ${pa}€, PV HT = ${pv}€. Calculer le taux de MARGE (en %).`, type: 'calculation', correctAnswer: 50, explanation: "(25 / 50) * 100", unit: "%", formula: "", params: {} };
+        return { 
+          id: 'm_calc_m1', text: `PA HT = ${pa}€, PV HT = ${pv} €. Calculer le taux de MARGE (en %).`, 
+          type: 'calculation', module: 'management', theme: 'Marges et Taux', difficulty: 'medium',
+          correctAnswer: 50, explanation: "(25 / 50) * 100", method: "(PV HT - PA HT) / PA HT", courseReminder: "Marge / PA HT", unit: "%" 
+        };
       }});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'margins', generator: () => {
         const pa = 60; const pv = 100;
-        return { id: 'm_calc_m2', text: `PA HT = ${pa}€, PV HT = ${pv}€. Calculer le taux de MARQUE (en %).`, type: 'calculation', correctAnswer: 40, explanation: "(40 / 100) * 100", unit: "%", formula: "", params: {} };
+        return { 
+          id: 'm_calc_m2', text: `PA HT = ${pa}€, PV HT = ${pv} €. Calculer le taux de MARQUE (en %).`, 
+          type: 'calculation', module: 'management', theme: 'Marges et Taux', difficulty: 'medium',
+          correctAnswer: 40, explanation: "(40 / 100) * 100", method: "(PV HT - PA HT) / PV HT", courseReminder: "Marge / PV HT", unit: "%" 
+        };
       }});
 
       // 3. COEFFICIENT MULTIPLICATEUR
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'coeff', generator: () => {
         const pa = 40; const ttc = 72;
-        return { id: 'm_calc_c1', text: `Achat ${pa}€ HT, Vente ${ttc}€ TTC. Quel est le coefficient multiplicateur ?`, type: 'calculation', correctAnswer: 1.8, explanation: "72 / 40", unit: "", formula: "", params: {} };
+        return { 
+          id: 'm_calc_c1', text: `Achat ${pa}€ HT, Vente ${ttc}€ TTC. Quel est le coefficient multiplicateur ?`, 
+          type: 'calculation', module: 'management', theme: 'Coefficient Multiplicateur', difficulty: 'medium',
+          correctAnswer: 1.8, explanation: "72 / 40", method: "PV TTC / PA HT", courseReminder: "Coeff = PV TTC / PA HT", unit: "" 
+        };
       }});
 
       // 4. GESTION DES STOCKS
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'stocks', generator: () => {
         const sm = 10000; const cmv = 60000;
-        return { id: 'm_calc_s1', text: `Stock Moyen = ${formatCurrency(sm)}, CMV annuel = ${formatCurrency(cmv)}. Délai de rotation (en jours) ?`, type: 'calculation', correctAnswer: 60, explanation: "(10000 / 60000) * 360", unit: " jours", formula: "", params: {} };
+        return { 
+          id: 'm_calc_s1', text: `Stock Moyen = ${formatCurrency(sm)}, CMV annuel = ${formatCurrency(cmv)}. Délai de rotation (en jours) ?`, 
+          type: 'calculation', module: 'management', theme: 'Gestion des Stocks', difficulty: 'medium',
+          correctAnswer: 60, explanation: "(10000 / 60000) * 360", method: "(Stock Moyen / CMV) * 360", courseReminder: "Délai = (Stock Moyen / CMV) * 360", unit: " jours" 
+        };
       }});
 
       // 5. SEUIL DE RENTABILITÉ
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'be', generator: () => ({
-        id: 'm_th_2', type: 'theory', text: "Le Seuil de Rentabilité est le CA pour lequel :", 
+        id: 'm_th_2', type: 'theory', module: 'management', theme: 'Seuil de Rentabilité', difficulty: 'medium',
+        text: "Le Seuil de Rentabilité est le CA pour lequel :", 
         correctAnswer: "Le résultat est nul (0)",
         options: ["La marge est maximale", "Les charges fixes sont nulles", "Le résultat est nul (0)", "Les impôts sont payés"],
-        explanation: "C'est le point d'équilibre où l'entreprise ne fait ni perte ni profit.", unit: "", formula: "", params: {}
+        explanation: "C'est le point d'équilibre où l'entreprise ne fait ni perte ni profit.", method: "Définition du seuil de rentabilité.", courseReminder: "SR = CF / Taux MCV", unit: ""
       })});
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'be', generator: () => {
         const fixes = 40000; const tmcv = 25;
-        return { id: 'm_calc_be1', text: `Charges Fixes = ${formatCurrency(fixes)}, Taux MCV = 25%. Quel est le Seuil de Rentabilité ?`, type: 'calculation', correctAnswer: 160000, explanation: "40000 / 0.25", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'm_calc_be1', text: `Charges Fixes = ${formatCurrency(fixes)}, Taux MCV = 25%. Quel est le Seuil de Rentabilité ?`, 
+          type: 'calculation', module: 'management', theme: 'Seuil de Rentabilité', difficulty: 'medium',
+          correctAnswer: 160000, explanation: "40000 / 0.25", method: "CF / Taux MCV", courseReminder: "SR = CF / (Taux MCV / 100)", unit: "€" 
+        };
       }});
 
       // 6. POINT MORT
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'be', generator: () => {
         const sr = 200000; const ca = 800000;
-        return { id: 'm_calc_pm1', text: `Si le SR est de ${formatCurrency(sr)} et le CA annuel de ${formatCurrency(ca)}, quel est le point mort (en jours) ?`, type: 'calculation', correctAnswer: 90, explanation: "(200000 / 800000) * 360", unit: " jours", formula: "", params: {} };
+        return { 
+          id: 'm_calc_pm1', text: `Si le SR est de ${formatCurrency(sr)} et le CA annuel de ${formatCurrency(ca)}, quel est le point mort (en jours) ?`, 
+          type: 'calculation', module: 'management', theme: 'Seuil de Rentabilité', difficulty: 'medium',
+          correctAnswer: 90, explanation: "(200000 / 800000) * 360", method: "(SR / CA) * 360", courseReminder: "Point Mort = (SR / CA) * 360", unit: " jours" 
+        };
       }});
       
       // 7. COÛT DE REVIENT
+      // Fix: Added missing Question properties and removed unsupported ones
       qPool.push({ category: 'cost', generator: () => {
         const brut = 100; const remise = 10; const port = 5;
-        return { id: 'm_calc_cr1', text: `Prix Achat Brut ${brut}€, Remise 10%, Frais de port ${port}€. Calculer le coût de revient HT.`, type: 'calculation', correctAnswer: 95, explanation: "100 - 10 + 5", unit: "€", formula: "", params: {} };
+        return { 
+          id: 'm_calc_cr1', text: `Prix Achat Brut ${brut}€, Remise 10%, Frais de port ${port}€. Calculer le coût de revient HT.`, 
+          type: 'calculation', module: 'management', theme: 'Coût de Revient', difficulty: 'easy',
+          correctAnswer: 95, explanation: "100 - 10 + 5", method: "PA Brut - Remise + Frais", courseReminder: "Coût Revient = PA Net + Frais Achat", unit: "€" 
+        };
       }});
     }
 
@@ -223,7 +316,7 @@ const ExamMode: React.FC<Props> = ({ course }) => {
     } else {
       const val = parseFloat(String(answer).replace(',', '.').replace(/\s/g, ''));
       // Seuil de tolérance réduit pour l'examen (précision exigée)
-      const threshold = Math.max(0.01, Math.abs(currentQuestion.correctAnswer * 0.001));
+      const threshold = Math.max(0.01, Math.abs((currentQuestion.correctAnswer as number) * 0.001));
       isCorrect = Math.abs(val - (currentQuestion.correctAnswer as number)) <= threshold;
     }
     
